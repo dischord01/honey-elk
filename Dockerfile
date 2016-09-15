@@ -1,5 +1,5 @@
 # rhel7_base image to get systemd to work w/ selinux
-FROM rhel7_base 
+FROM rhel7
 MAINTAINER Brad Sollar bsollar@redhat.com
 
 
@@ -37,12 +37,12 @@ RUN python /tmp/get-pip.py; \
              /data/ews/log/ /data/ews/conf/ /data/ews/dionaea/ /data/ews/emobility/ \
              /data/suricata/log/; \
     chown -R elasticsearch:elasticsearch /data; \
-    systemctl enable elasticsearch.service; \
-    systemctl enable logstash.service; \
-    systemctl enable kibana.service; \
     /opt/kibana/bin/kibana plugin -i tagcloud -u https://github.com/stormpython/tagcloud/archive/master.zip; \
 	/opt/kibana/bin/kibana plugin -i heatmap -u https://github.com/stormpython/heatmap/archive/master.zip
 
+RUN systemctl enable elasticsearch.service
+RUN systemctl enable logstash.service
+RUN systemctl enable kibana.service
 
 # Expose volumes
 VOLUME ["/data"]
@@ -54,18 +54,6 @@ EXPOSE 5601 9300 9200
 CMD ["/usr/sbin/init"]
 
 
-
-# sudo docker built -t honey-elk .
+# sudo docker build -t honey-elk .
 # sudo docker run --privileged -d -v /sys/fs/cgroup:/sys/fs/cgroup:ro -p 5601:5601 -p 9200:9200 -p 9300:9300 honey-elk
 
-
-
-# # Let's create ews.ip before reboot and prevent race condition for first start
-# myLOCALIP=$(hostname -I | awk '{ print $1 }')
-# myEXTIP=$(curl myexternalip.com/raw)
-# sed -i "s#IP:.*#IP: $myLOCALIP, $myEXTIP#" /etc/issue
-# tee /data/ews/conf/ews.ip << EOF
-# [MAIN]
-# ip = $myEXTIP
-# EOF
-# chown $myuser:$myuser /data/ews/conf/ews.ip
