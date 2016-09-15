@@ -1,5 +1,5 @@
 # rhel7_base image to get systemd to work w/ selinux
-FROM rhel7
+FROM rhel7:latest
 MAINTAINER Brad Sollar bsollar@redhat.com
 
 
