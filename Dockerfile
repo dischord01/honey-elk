@@ -1,5 +1,5 @@
 # rhel7_base image to get systemd to work w/ selinux
-FROM openshift/base-centos7
+FROM centos:7
 MAINTAINER Brad Sollar bsollar@redhat.com
 
 
@@ -55,5 +55,5 @@ CMD ["/usr/sbin/init"]
 
 
 # sudo docker build -t honey-elk .
-# sudo docker run --privileged -d -v /sys/fs/cgroup:/sys/fs/cgroup:ro -p 5601:5601 -p 9200:9200 -p 9300:9300 honey-elk
+# sudo docker run -d -p 5601:5601 -p 9200:9200 -p 9300:9300 honey-elk
 
